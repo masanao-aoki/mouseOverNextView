@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0046)http://digi-tamaring.org/box_anime/index3.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript" ></script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var $target = $("a");
+	var $frame = $("#frame");
+	var showFlag = 0;
+
+	var trueId = "frames";
+	var falseId = "outside";
+
+	var fWidth = "30%";
+	var errorText = "外部サイトはご覧頂けません。";
+
+
+	//urlcheck
+	function urlcheck(urls) {
+		urlHead = urls.split("/")[0];
+		if(urlHead != "http:" && urlHead != "https:") {
+			showFlag = 1;
+		}
+		showFlag = 1;
+	}
+
+	//remove item
+	function itemRemove() {
+			$frame.find(">*").remove();
+			$frame.css({
+			 width: "0%"
+			});
+	}
+
+	//css 
+	function cssSet (tagsId,fWidth) {
+		$(tagsId).animate({
+			 width: fWidth
+			});
+	}
+
+	$target.mouseover(function() {
+		var srcUrls = $(this).attr("href");
+		var offsets = $(this).offset();
+		urlcheck(srcUrls);
+		if(showFlag) {
+			$frame.append("<iframe id='"+trueId+"' src='"+srcUrls+"'></iframe>").addClass("loading");
+			$frame.find("iframe").load(function() {
+				$frame.removeClass("loading").addClass("complete");
+				console.log($frame.find("iframe").contents().find('title').text());
+
+			});
+
+			cssSet($frame,fWidth);
+		}
+		else {
+			$frame.append("<div id='"+falseId+"'>"+errorText+"</div>")
+			cssSet($frame,fWidth);
+		}
+
+	});
+
+	$target.mouseout(function() {
+		$frame.removeClass("complete");
+		showFlag = 0;
+		itemRemove();
+	});
+
+
+});
+</script>
+
+<style type="text/css">
+#frame {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	width: 0;
+	overflow: hidden;
+	background-color: #ccc;
+	text-align: center;
+}
+
+#frame #frames{
+	border: 0px;
+	width: 80%;
+	margin: 0 auto;
+}
+
+</style>
+
+
+</head>
+<body style="zoom: 1;">
+
+<ul id="name">
+	<li><a href="https://www.google.co.jp/">google</a></li>
+		<li><a href="tests2.html">google</a></li>
+
+</ul>
+
+<div id="frame">
+</div>
+
+</body>
+
+</html>
