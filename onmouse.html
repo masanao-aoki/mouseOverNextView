@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var $target = $("a");
+	var $target = $(".sideInfo img");
 	var $frame = $("#frame");
 	var showFlag = 0;
 
@@ -28,32 +28,28 @@ $(document).ready(function() {
 
 	//remove item
 	function itemRemove() {
-			$frame.find(">*").remove();
-			$frame.css({
+			$frame.animate({
 			 width: "0%"
+			},function(){
+				$frame.find(">*").remove();
 			});
 	}
 
 	//css 
-	function cssSet (tagsId,fWidth) {
+	function cssSet (tagsId,fWidth,srcUrls) {
 		$(tagsId).animate({
 			 width: fWidth
+			},function() {
+				tagsId.append("<img src='"+srcUrls+"' width='"+window.innerWidth*0.2+"' />");
 			});
 	}
 
 	$target.mouseover(function() {
-		var srcUrls = $(this).attr("href");
+		var srcUrls = $(this).attr("src");
 		var offsets = $(this).offset();
 		urlcheck(srcUrls);
 		if(showFlag) {
-			$frame.append("<iframe id='"+trueId+"' src='"+srcUrls+"'></iframe>").addClass("loading");
-			$frame.find("iframe").load(function() {
-				$frame.removeClass("loading").addClass("complete");
-				console.log($frame.find("iframe").contents().find('title').text());
-
-			});
-
-			cssSet($frame,fWidth);
+			cssSet($frame,fWidth,srcUrls);
 		}
 		else {
 			$frame.append("<div id='"+falseId+"'>"+errorText+"</div>")
@@ -96,10 +92,9 @@ $(document).ready(function() {
 </head>
 <body style="zoom: 1;">
 
-<ul id="name">
-	<li><a href="https://www.google.co.jp/">google</a></li>
-		<li><a href="tests2.html">google</a></li>
-
+<ul id="name" class="sideInfo">
+	<li><img src="img/001.jpg" width="150" /></li>
+	<li><img src="img/002.jpg" width="150" /></li>
 </ul>
 
 <div id="frame">
